@@ -1,16 +1,11 @@
 from django.db import models
 
-# Create your models here.
-
-class Proveedor():
+class Proveedor(models.Model):  
     nombre = models.CharField(max_length=100)
-    telefono = models.IntegerField(max_length=10)
-    correo = models.CharField(max_length=50)
-
-
+    telefono = models.CharField(max_length=15) 
+    correo = models.EmailField(max_length=50) 
 class Producto(models.Model):
-    
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
@@ -19,6 +14,3 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.nombre
-    
-
-    
