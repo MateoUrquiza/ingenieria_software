@@ -1,0 +1,13 @@
+{% extends 'Tematica/base.html' %}
+
+{% block body %}
+<div class="contenedor">
+    <h1>Crear producto</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+</div>
+{% endblock %}

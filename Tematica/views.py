@@ -1,6 +1,8 @@
+    
+from django.shortcuts import  get_object_or_404, redirect,render
+from .forms import ProductoForm
+from .models import Producto
 
-from django.http import HttpResponse
-from django.shortcuts import render
 
 def home(request):
     productos_destacados = [
@@ -52,3 +54,43 @@ def ropa(request):
     return render(request, "Tematica/ropa.html", {
         "productos": productos_hombre
     })
+
+def productos(request):
+    productos = Producto.objects.all()
+    return render(request, "Tematica/productos.html", {"productos": productos})
+
+
+def crear_producto(request):
+    if request.method == "POST":
+        form = ProductoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("productos")
+    else:
+        form = ProductoForm()
+
+    return render(request, "Tematica/crear_producto.html", {"form": form})
+
+
+def editar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+
+    if request.method == "POST":
+        form = ProductoForm(request.POST, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect("productos")
+    else:
+        form = ProductoForm(instance=producto)
+
+    return render(request, "Tematica/editar_producto.html", {"form": form})
+
+
+def eliminar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+
+    if request.method == "POST":
+        producto.delete()
+        return redirect("productos")
+
+    return render(request, "Tematica/eliminar_producto.html", {"producto": producto})
