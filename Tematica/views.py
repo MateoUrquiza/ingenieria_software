@@ -1,5 +1,6 @@
-    
 from django.shortcuts import  get_object_or_404, redirect,render
+from django.contrib.auth.decorators import login_required, permission_required
+
 from .forms import ProductoForm
 from .models import Producto
 
@@ -59,7 +60,7 @@ def productos(request):
     productos = Producto.objects.all()
     return render(request, "Tematica/productos.html", {"productos": productos})
 
-
+@permission_required('Tematica.add_Producto')
 def crear_producto(request):
     if request.method == "POST":
         form = ProductoForm(request.POST)
@@ -71,7 +72,7 @@ def crear_producto(request):
 
     return render(request, "Tematica/crear_producto.html", {"form": form})
 
-
+@permission_required('Tematica.change_Producto')
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 

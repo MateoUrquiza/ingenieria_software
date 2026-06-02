@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings 
+from django.conf.urls.static import static
+from usuarios.views import registrarse 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("Tematica.urls"))
+    path('', include("Tematica.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("accounts/register", registrarse, name="register"),
 ]

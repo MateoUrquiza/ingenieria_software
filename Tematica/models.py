@@ -1,10 +1,21 @@
 from django.db import models
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 class Proveedor(models.Model):  
-    nombre = models.CharField(max_length=100)
-    telefono = models.CharField(max_length=15) 
-    correo = models.EmailField(max_length=50) 
+    nombre = models.CharField(_("Nombre del Proveedor"), max_length=100)
+    telefono = models.CharField(_("Teléfono"), max_length=15) 
+    correo = models.EmailField(_("Correo Electrónico"), max_length=50) 
     
+    usuario_responsable = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL, 
+        null=True,
+        blank=True,
+        related_name="proveedores_asignados",
+        verbose_name=_("Empleado responsable")
+    )
+
     def __str__(self):
         return self.nombre
 
