@@ -186,6 +186,19 @@
                 <li><a href="/ropa">Hombre</a></li>
                 <li><a href="/productos/">Productos</a></li>
                 <li><a href="/productos/crear/">Crear producto</a></li>
+
+                {% if user.is_authenticated %}
+                    <li class="usuario-logueado">Hola, {{ user.username }}</li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit">Cerrar sesión</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+                    <li><a href="{% url 'register' %}">Registrarse</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

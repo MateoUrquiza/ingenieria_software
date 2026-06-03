@@ -1,0 +1,17 @@
+{% extends 'Tematica/base.html' %}
+
+{% block body %}
+<div class="contenedor">
+    <h1>Registrarse</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear cuenta</button>
+    </form>
+
+    <p style="text-align:center; margin-top:15px;">
+        ¿Ya tenés cuenta? <a href="{% url 'login' %}">Iniciar sesión</a>
+    </p>
+</div>
+{% endblock %}

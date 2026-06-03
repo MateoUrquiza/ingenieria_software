@@ -4,6 +4,20 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .forms import ProductoForm
 from .models import Producto
 
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+
+def registrarse(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            usuario = form.save()
+            login(request, usuario)
+            return redirect("home")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "registration/register.html", {"form": form})
 
 def home(request):
     productos_destacados = [
@@ -60,7 +74,7 @@ def productos(request):
     productos = Producto.objects.all()
     return render(request, "Tematica/productos.html", {"productos": productos})
 
-@permission_required('Tematica.add_Producto')
+@permission_required('Tematica.add_producto')
 def crear_producto(request):
     if request.method == "POST":
         form = ProductoForm(request.POST)
@@ -72,7 +86,7 @@ def crear_producto(request):
 
     return render(request, "Tematica/crear_producto.html", {"form": form})
 
-@permission_required('Tematica.change_Producto')
+@permission_required('Tematica.change_producto')
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 
