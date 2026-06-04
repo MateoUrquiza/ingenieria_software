@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar producto</title>
-</head>
-<body>
+{% extends 'Tematica/base.html' %}
+
+{% block body %}
+<div class="contenedor">
     <h1>Editar producto</h1>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Actualizar</button>
     </form>
-
-    <a href="/productos/">Volver</a>
-</body>
-</html>
+</div>
+{% endblock %}

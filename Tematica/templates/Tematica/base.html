@@ -11,11 +11,22 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8f8f8;
-            color: #222;
-        }
+        html, body {
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
 
         header {
             background: #111;
@@ -23,37 +34,80 @@
             padding: 20px 40px;
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        nav h1 {
-            font-size: 28px;
-        }
+nav h1 {
+    font-size: 28px;
+}
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.foto-navbar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
 
         .hero {
-            background: url("https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1600&auto=format&fit=crop") center/cover;
-            height: 420px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
+    background-image: url("https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1600&auto=format&fit=crop");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 70vh;
+    min-height: 420px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
         }
+.usuario-logueado {
+    color: white;
+    font-weight: bold;
+}
+
+.logout-form {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    max-width: none;
+    display: inline;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+.logout-btn:hover {
+    opacity: 0.8;
+}
 
         .hero-content {
             background: rgba(0,0,0,0.45);
@@ -142,6 +196,7 @@
         .contenedor {
             padding: 40px;
         }
+        
 
         form {
             max-width: 600px;
@@ -174,6 +229,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.08);
         }
+        
     </style>
 </head>
 <body>
@@ -183,24 +239,29 @@
             <h1>Urban Style</h1>
             <ul>
                 <li><a href="/">Inicio</a></li>
-                <li><a href="/ropa">Hombre</a></li>
+                <li><a href="/hombre/">Hombre</a></li>
                 <li><a href="/productos/">Productos</a></li>
                 <li><a href="/productos/crear/">Crear producto</a></li>
 
                 {% if user.is_authenticated %}
-                    <li class="usuario-logueado">Hola, {{ user.username }}</li>
-                    <li>
-                        <form method="post" action="{% url 'logout' %}" class="logout-form">
-                            {% csrf_token %}
-                            <button type="submit">Cerrar sesión</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
-                    <li><a href="{% url 'register' %}">Registrarse</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+            {% if user.foto_perfil %}
+                <li>
+                    <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" class="foto-navbar">
+                </li>
+            {% endif %}
+            <li class="usuario-logueado">Hola, {{ user.username }}</li>
+            <li>
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn">Cerrar sesión</button>
+                </form>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+            <li><a href="{% url 'register' %}">Registrarse</a></li>
+        {% endif %}
+    </ul>
+</nav>
     </header>
 
     {% block hero %}{% endblock %}

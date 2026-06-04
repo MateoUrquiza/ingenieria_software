@@ -7,11 +7,11 @@ from django.contrib.auth import login
 
 def registrarse(request):
     if request.method == 'POST':
-        form = UsuarioPersonalizadoForm(request.POST)
+        form = UsuarioPersonalizadoForm(request.POST, request.FILES)
         if form.is_valid():
             usuario = form.save()
             login(request, usuario)
-            return redirect('tareas')
+            return redirect('home')
     else:
         form = UsuarioPersonalizadoForm()
     return render(request, 'registration/register.html', {"form":form})

@@ -4,20 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .forms import ProductoForm
 from .models import Producto
 
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 
-def registrarse(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            usuario = form.save()
-            login(request, usuario)
-            return redirect("home")
-    else:
-        form = UserCreationForm()
-
-    return render(request, "registration/register.html", {"form": form})
 
 def home(request):
     productos_destacados = [
@@ -42,7 +29,7 @@ def home(request):
         "productos": productos_destacados
     })
 
-def ropa(request):
+def hombre(request):
     productos_hombre = [
         {
             "nombre": "Campera Negra",
@@ -70,14 +57,18 @@ def ropa(request):
         "productos": productos_hombre
     })
 
+@login_required
+@permission_required('Tematica.view_producto')
 def productos(request):
     productos = Producto.objects.all()
     return render(request, "Tematica/productos.html", {"productos": productos})
 
+
+@login_required
 @permission_required('Tematica.add_producto')
 def crear_producto(request):
     if request.method == "POST":
-        form = ProductoForm(request.POST)
+        form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect("productos")
@@ -86,12 +77,14 @@ def crear_producto(request):
 
     return render(request, "Tematica/crear_producto.html", {"form": form})
 
+
+@login_required
 @permission_required('Tematica.change_producto')
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 
     if request.method == "POST":
-        form = ProductoForm(request.POST, instance=producto)
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
             form.save()
             return redirect("productos")
@@ -101,6 +94,8 @@ def editar_producto(request, id):
     return render(request, "Tematica/editar_producto.html", {"form": form})
 
 
+@login_required
+@permission_required('Tematica.delete_producto')
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 

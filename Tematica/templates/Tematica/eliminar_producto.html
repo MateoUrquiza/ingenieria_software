@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Eliminar producto</title>
-</head>
-<body>
-    <h1>Eliminar producto</h1>
+{% extends 'Tematica/base.html' %}
 
+{% block body %}
+<div class="contenedor">
+    <h1>Eliminar producto</h1>
     <p>¿Seguro que querés eliminar <strong>{{ producto.nombre }}</strong>?</p>
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Si, eliminar</button>
+        <button type="submit">Eliminar</button>
     </form>
-
-    <a href="/productos/">Cancelar</a>
-</body>
-</html>
+</div>
+{% endblock %}
